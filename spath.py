@@ -30,6 +30,13 @@ state = []
 NSQUARES = 5
 
 
+def show_state(state):
+    for r in xrange(NSQUARES):
+        print "+---" * NSQUARES + "+"
+        print "| %s |" % ' | '.join(map(str, state[NSQUARES - 1 - r]))
+    print "+---" * NSQUARES + "+"
+
+
 def next_moves(loc):
     # loc is a 2-ple giving (row, column).
     deltas = [(-2, -1), (-2, 1),
@@ -43,28 +50,36 @@ def next_moves(loc):
         yield m
 
 
-def find_path(path, move):
+def find_path(move):
+    # figure out every path to the 'e' square from here.  return a list of paths (list of list of (r, c)
     if state[move[0]][move[1]] == 'e':
-        return path.append(move)
-
-    if state[move[0]][move[1]] != 0:
-        return
+        return [[move]]
 
     results = []
     for m in next_moves(move):
-        state[move[0]][move[1]] = 'v'
-        path_copy = list(path)
-        path_copy = path_copy.append(move)
-        result = find_path(path_copy, m)
+        if state[m[0]][m[1]] == 'e':
+            result = find_path(m)
+            results = results + result
+            break
+
+        if state[m[0]][m[1]] != 0:
+            continue
+
+        state[m[0]][m[1]] = 'v'
+
+        result = find_path(m)
         if result:
-            results.append(result)
+            results = result + results
 
+        state[m[0]][m[1]] = 0
 
-def show_state(state):
-    for r in xrange(NSQUARES):
-        print "+---" * NSQUARES + "+"
-        print "| %s |" % ' | '.join(map(str, state[NSQUARES - 1 - r]))
-    print "+---" * NSQUARES + "+"
+    # now stick <move> onto the front of each list we got back from the recursive calls
+    final = []
+    for r in results:
+        f = [(move)] + r
+        final.append(f)
+
+    return final
 
 
 def shortest_path(from_loc, to_loc):
@@ -74,5 +89,5 @@ def shortest_path(from_loc, to_loc):
     state[from_loc[0]][from_loc[1]] = 's'
     state[to_loc[0]][to_loc[1]] = 'e'
     show_state(state)
-    for m in next_moves(from_loc):
-        find_path([from_loc], m)
+    results = find_path(from_loc)
+    print min(results, key = lambda x: len(x))
