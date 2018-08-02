@@ -28,6 +28,7 @@
 
 state = []
 NSQUARES = 5
+all_moves = {}
 
 
 def show_state(state):
@@ -44,10 +45,10 @@ def next_moves(loc):
               (1, -2), (1, 2),
               (2, -1), (2, 1)]
 
-    moves = map(lambda d: tuple([sum(x) for x in zip(loc, d)]), deltas)
-    moves = filter(lambda x: 0 <= x[0] < NSQUARES and 0 <= x[1] < NSQUARES, moves)
-    for m in moves:
-        yield m
+    if loc not in all_moves:
+        moves = map(lambda d: tuple([sum(x) for x in zip(loc, d)]), deltas)
+        all_moves[loc] = filter(lambda x: 0 <= x[0] < NSQUARES and 0 <= x[1] < NSQUARES, moves)
+    return all_moves[loc]
 
 
 def find_path(move):
@@ -91,3 +92,4 @@ def shortest_path(from_loc, to_loc):
     show_state(state)
     results = find_path(from_loc)
     print min(results, key = lambda x: len(x))
+    print "found %s paths" % len(results)
