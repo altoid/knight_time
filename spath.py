@@ -77,7 +77,7 @@ def find_path(move):
     # now stick <move> onto the front of each list we got back from the recursive calls
     final = []
     for r in results:
-        f = [(move)] + r
+        f = [move] + r
         final.append(f)
 
     return final
