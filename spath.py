@@ -62,9 +62,10 @@ def find_path(current_path, move, level):
     # figure out every path to the 'e' square from here.  return a list of paths (list of list of (r, c)
     if state[move[0]][move[1]] == 'e':
         path_count += 1
-        min_path_len = min(min_path_len, level)
         current_path.append(move)
-        print min_path_len
+        if level < min_path_len:
+            min_path_len = level
+            print current_path, min_path_len
         current_path.pop()
         return
 
