@@ -39,7 +39,8 @@ shortest_path = None
 def show_state(state):
     for r in xrange(NSQUARES):
         print "+---" * NSQUARES + "+"
-        print "| %s |" % ' | '.join(map(str, state[NSQUARES - 1 - r]))
+        row_to_display = [x if x else ' ' for x in state[NSQUARES - 1 - r]]
+        print "| %s |" % ' | '.join(row_to_display)
     print "+---" * NSQUARES + "+"
 
 
@@ -99,10 +100,15 @@ def shortest_path(from_loc, to_loc):
         state.append([0] * NSQUARES)
     state[from_loc[0]][from_loc[1]] = 's'
     state[to_loc[0]][to_loc[1]] = 'e'
-    show_state(state)
+    # show_state(state)
     find_path([], from_loc, 0)
     print "%s ==> %s" % (from_loc, to_loc)
     print shortest_path
+    m = 1
+    for t in shortest_path[1:-1]:
+        state[t[0]][t[1]] = str(m)
+        m += 1
+    show_state(state)
     print "done"
 
 
@@ -110,4 +116,3 @@ if __name__ == '__main__':
     from_loc = (random.randint(0, NSQUARES - 1), random.randint(0, NSQUARES - 1))
     to_loc = (random.randint(0, NSQUARES - 1), random.randint(0, NSQUARES - 1))
     shortest_path(from_loc, to_loc)
-    
