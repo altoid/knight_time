@@ -13,4 +13,4 @@ class TestSPath(unittest.TestCase):
             print m
 
     def test_shortest_path(self):
-        spath.shortest_path((0, 0), (4, 2))
+        spath.shortest_path((0, 0), (7, 0))

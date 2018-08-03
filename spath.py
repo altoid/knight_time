@@ -1,5 +1,7 @@
 #!/usr/bin/env python
 
+import random
+
 # find the shortest path between two squares on a chess board, with
 # moves to be executed by a night.
 #
@@ -31,6 +33,8 @@ NSQUARES = 8
 all_moves = {}
 path_count = 0
 min_path_len = NSQUARES * NSQUARES + 1
+shortest_path = None
+
 
 def show_state(state):
     for r in xrange(NSQUARES):
@@ -55,6 +59,7 @@ def next_moves(loc):
 def find_path(current_path, move, level):
     global path_count
     global min_path_len
+    global shortest_path
 
     if level > min_path_len:
         return
@@ -65,7 +70,7 @@ def find_path(current_path, move, level):
         current_path.append(move)
         if level < min_path_len:
             min_path_len = level
-            print current_path, min_path_len
+            shortest_path = list(current_path)
         current_path.pop()
         return
 
@@ -96,4 +101,13 @@ def shortest_path(from_loc, to_loc):
     state[to_loc[0]][to_loc[1]] = 'e'
     show_state(state)
     find_path([], from_loc, 0)
-    print "done, found %s paths" % path_count
+    print "%s ==> %s" % (from_loc, to_loc)
+    print shortest_path
+    print "done"
+
+
+if __name__ == '__main__':
+    from_loc = (random.randint(0, NSQUARES - 1), random.randint(0, NSQUARES - 1))
+    to_loc = (random.randint(0, NSQUARES - 1), random.randint(0, NSQUARES - 1))
+    shortest_path(from_loc, to_loc)
+    
