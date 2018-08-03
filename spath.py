@@ -29,7 +29,7 @@
 state = []
 NSQUARES = 5
 all_moves = {}
-
+path_count = 0
 
 def show_state(state):
     for r in xrange(NSQUARES):
@@ -51,16 +51,21 @@ def next_moves(loc):
     return all_moves[loc]
 
 
-def find_path(move):
+def find_path(current_path, move):
+    global path_count
+
     # figure out every path to the 'e' square from here.  return a list of paths (list of list of (r, c)
     if state[move[0]][move[1]] == 'e':
-        return [[move]]
+        path_count += 1
+        current_path.append(move)
+        print current_path
+        current_path.pop()
+        return
 
-    results = []
+    current_path.append(move)
     for m in next_moves(move):
         if state[m[0]][m[1]] == 'e':
-            result = find_path(m)
-            results = results + result
+            find_path(current_path, m)
             break
 
         if state[m[0]][m[1]] != 0:
@@ -68,28 +73,20 @@ def find_path(move):
 
         state[m[0]][m[1]] = 'v'
 
-        result = find_path(m)
-        if result:
-            results = result + results
+        find_path(current_path, m)
 
         state[m[0]][m[1]] = 0
-
-    # now stick <move> onto the front of each list we got back from the recursive calls
-    final = []
-    for r in results:
-        f = [move] + r
-        final.append(f)
-
-    return final
+    current_path.pop()
 
 
 def shortest_path(from_loc, to_loc):
+    global path_count
+    
     # from_loc and to_loc are 2-ples
     for i in xrange(NSQUARES):
         state.append([0] * NSQUARES)
     state[from_loc[0]][from_loc[1]] = 's'
     state[to_loc[0]][to_loc[1]] = 'e'
     show_state(state)
-    results = find_path(from_loc)
-    print min(results, key = lambda x: len(x))
-    print "found %s paths" % len(results)
+    find_path([], from_loc)
+    print "done, found %s paths" % path_count
