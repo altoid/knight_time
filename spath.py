@@ -29,7 +29,7 @@ import random
 # if all of our moves goes to a 'V' square then the path is no good.
 
 state = []
-NSQUARES = 8
+NSQUARES = 12
 all_moves = {}
 path_count = 0
 min_path_len = NSQUARES * NSQUARES + 1
@@ -115,4 +115,7 @@ def shortest_path(from_loc, to_loc):
 if __name__ == '__main__':
     from_loc = (random.randint(0, NSQUARES - 1), random.randint(0, NSQUARES - 1))
     to_loc = (random.randint(0, NSQUARES - 1), random.randint(0, NSQUARES - 1))
+    while to_loc == from_loc:
+        to_loc = (random.randint(0, NSQUARES - 1), random.randint(0, NSQUARES - 1))
+
     shortest_path(from_loc, to_loc)
