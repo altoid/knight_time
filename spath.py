@@ -3,7 +3,7 @@
 import random
 
 # find the shortest path between two squares on a chess board, with
-# moves to be executed by a night.
+# moves to be executed by a knight.
 #
 #     +--+--+--+--+--+--+--+--+
 #  7  |  |  |  |  |  |  |  |  |
